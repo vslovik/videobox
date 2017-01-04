@@ -12,27 +12,16 @@
   apt:
     update_cache: yes
 
-- shell: add-apt-repository ppa:mc3man/gstffmpeg-keep
-
-- name: Run the equivalent of "apt-get update" as a separate step
-  apt:
-    update_cache: yes
-
 - name: update and install dependencies
   apt:
     name: "{{ item }}"
     state: present
-    update_cache: yes
   with_items:
     - libgstreamer0.10-0
     - libgstreamer0.10-dev
     - gstreamer0.10-tools
     - gstreamer0.10-plugins-base
     - libgstreamer-plugins-base0.10-dev
-    - gstreamer0.10-plugins-good
-    - gstreamer0.10-plugins-ugly
-    - gstreamer0.10-plugins-bad
-    - gstreamer0.10-ffmpeg
     - libopencv-dev
     - build-essential
     - cmake
@@ -45,12 +34,12 @@
     - libdc1394-22-dev
     - libjpeg-dev
     - libpng12-dev
-    - libtiff4-dev
+    - libtiff5-dev
     - libjasper-dev
     - libavcodec-dev
     - libavformat-dev
     - libswscale-dev
-    - libxine-dev
+    - libxine2-dev
     - libgstreamer0.10-dev
     - libgstreamer-plugins-base0.10-dev
     - libv4l-dev
@@ -68,30 +57,10 @@
     - unzip
     - libconfig++-dev
     - qt5-default
-
-- name: add-apt-repository ppa:mc3man/gstffmpeg-keep
-  shell: add-apt-repository ppa:mc3man/gstffmpeg-keep
-
-- name: add-apt-repository ppa:mc3man/trusty-media
-  shell: add-apt-repository ppa:mc3man/trusty-media
-
-- name: update and install gstreamer0.10-ffmpeg gstreamer0.10-plugins-bad ffmpeg
-  apt:
-    name: "{{ item }}"
-    state: present
-    update_cache: yes
-  with_items:
-    - gstreamer0.10-ffmpeg
-    - gstreamer0.10-plugins-bad
+    - gstreamer0.10-plugins-good
     - ffmpeg
     - frei0r-plugins
-
-- name: Run the equivalent of "apt-get update" as a separate step
-  apt:
-    update_cache: yes
-
-#- name: Install ffmpeg inside anaconda3
-#  shell: conda install -c menpo ffmpeg=2.7.0
+    - ubuntu-restricted-extras
 
 - unarchive:
     src: https://github.com/opencv/opencv/archive/3.2.0.zip
@@ -131,6 +100,12 @@
   args:
     chdir: /home/vagrant/opencv-3.2.0/build
 
-- shell: sh -c 'echo "/usr/local/lib" > /etc/ld.so.conf.d/opencv.conf'
+- name: linking opecv library
+  shell: sh -c 'echo "/usr/local/lib" > /etc/ld.so.conf.d/opencv.conf'
 
-- shell: ln /dev/null /dev/raw1394
+- name: ln /dev/null /dev/raw1394
+  shell: ln /dev/null /dev/raw1394
+
+- name: export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/opencv/lib
+  shell: export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/opencv/lib
+  sudo: no

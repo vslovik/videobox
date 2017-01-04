@@ -12,7 +12,8 @@ Vagrant.configure(2) do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
-  config.vm.box = "ubuntu/trusty64"
+  # config.vm.box = "ubuntu/trusty64"
+  config.vm.box = "gbarbieru/xenial"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -69,6 +70,10 @@ Vagrant.configure(2) do |config|
   #	bash Miniconda-latest-Linux-`uname -p`.sh
   #	source ~/.bashrc
   # SHELL
+
+  config.vm.provision "shell", inline: <<-SHELL
+    sudo apt-get -y install python-minimal
+  SHELL
 
   config.vm.synced_folder "../video", "/opt/video", nfs: false
 
