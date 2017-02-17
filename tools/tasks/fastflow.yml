@@ -1,0 +1,10 @@
+---
+- name: download and unarchive fastflow
+  unarchive:
+    src: https://netcologne.dl.sourceforge.net/project/mc-fastflow/fastflow-2.1.0.tgz
+    dest: "{{ home_dir }}"
+    remote_src: True
+  sudo: no
+
+- name: link fastflow
+  shell: ln -s "{{ home_dir }}"/fastflow-2.1.0 /usr/local/include/ff

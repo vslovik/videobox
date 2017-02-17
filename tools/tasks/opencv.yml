@@ -62,43 +62,44 @@
     - frei0r-plugins
     - ubuntu-restricted-extras
 
-- unarchive:
+- name: download and unarchive fastflow
+  unarchive:
     src: https://github.com/opencv/opencv/archive/3.2.0.zip
-    dest: /home/vagrant
+    dest: "{{ home_dir }}"
     remote_src: True
   sudo: no
 
 - name: mkdir build
-  file: path=/home/vagrant/opencv-3.2.0/build state=directory
+  file: path="{{ opencv_build_dir }}" state=directory
   sudo: no
 
 - name: cmake
   shell: 'cmake -DWITH_XINE=ON -DCMAKE_BUILD_TYPE=RELEASE -DWITH_VTK=ON -DWITH_QT=ON -DWITH_LIBV4L=ON -DBUILD_TIFF=ON -DBUILD_opencv_java=OFF -DWITH_CUDA=OFF -DWITH_FFMPEG=ON -DENABLE_AVX=ON -DWITH_OPENGL=ON -DWITH_OPENCL=ON -DWITH_IPP=OFF -DWITH_TBB=ON -DWITH_EIGEN=ON -DWITH_V4L=ON -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/usr/local -DPYTHON3_EXECUTABLE=$(which python3.5) -DPYTHON3_INCLUDE_DIR=$(python3 -c "from distutils.sysconfig import get_python_inc; print(get_python_inc())") -DPYTHON3_PACKAGES_PATH=$(python3 -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())") ..'
   args:
-    chdir: /home/vagrant/opencv-3.2.0/build
+    chdir: "{{ opencv_build_dir }}"
   sudo: no
 
 - name: make clean
   shell: make clean
   args:
-    chdir: /home/vagrant/opencv-3.2.0/build
+    chdir: "{{ opencv_build_dir }}"
   sudo: no
 
 - name: make
   shell: "make -j $(nproc)"
   args:
-    chdir: /home/vagrant/opencv-3.2.0/build
+    chdir: "{{ opencv_build_dir }}"
   sudo: no
 
 - name: ldconfig
   shell: ldconfig
   args:
-    chdir: /home/vagrant/opencv-3.2.0/build
+    chdir: "{{ opencv_build_dir }}"
 
 - name: make install
   shell: make install
   args:
-    chdir: /home/vagrant/opencv-3.2.0/build
+    chdir: "{{ opencv_build_dir }}"
 
 - name: linking opecv library
   shell: sh -c 'echo "/usr/local/lib" > /etc/ld.so.conf.d/opencv.conf'

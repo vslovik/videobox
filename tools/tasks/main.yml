@@ -1,2 +1,3 @@
 ---
-- include: packages_u16.yml
+- include: fastflow.yml
+- include: opencv.yml
