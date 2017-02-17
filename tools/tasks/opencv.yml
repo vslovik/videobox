@@ -8,9 +8,9 @@
     - x264
     - libx264-dev
 
-- name: Run the equivalent of "apt-get update" as a separate step
-  apt:
-    update_cache: yes
+#- name: Run the equivalent of "apt-get update" as a separate step
+#  apt:
+#    update_cache: yes
 
 - name: update and install dependencies
   apt:
@@ -61,6 +61,7 @@
     - ffmpeg
     - frei0r-plugins
     - ubuntu-restricted-extras
+    - liblapacke-dev
 
 - name: download and unarchive fastflow
   unarchive:
